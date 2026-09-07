@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional, Any
 
 class informacion_candidato(BaseModel):
     nombre: str = Field(..., description='Nombre del candidato')

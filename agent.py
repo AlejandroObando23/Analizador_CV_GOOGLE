@@ -1,17 +1,13 @@
-import os
 from google.adk.agents import LlmAgent
 from google.genai import types
 from dotenv import load_dotenv
 from req import informacion_candidato
 
-from google.adk.models.lite_llm import LiteLlm
-groq_model = LiteLlm("groq/groq/compound")
 
 load_dotenv()
 
 APP_NAME = 'evaluador_candidatos'
 USER_ID = 'USER_1'
-SESSION_ID = 'Ssession_001'
 
 def crear_agente(puesto: str, formacion: str, experiencia: str, conocimientos: str, competencias: str) -> LlmAgent:
     instruction = f'''

@@ -6,7 +6,7 @@ import tempfile
 import uuid
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel,Field
+
 from agent import crear_agente, APP_NAME, USER_ID
 from pdf_text import pdf_text
 from google.adk.sessions import InMemorySessionService
@@ -129,7 +129,7 @@ async def evaluate_archive(
             results = []
             for pdf_path in pdf_paths:
                 if cancel_flag["cancelled"]:
-                    print("Evaluación cancelada por el usuario.")
+                    print("[INFO] Evaluación por lotes cancelada por el usuario.")
                     break
                 max_retries = 3
                 for attempt in range(max_retries):
@@ -140,16 +140,16 @@ async def evaluate_archive(
                         
                         r["filename"] = os.path.basename(pdf_path)
                         results.append(r)
-                        print(f"Éxito con {pdf_path}. Esperando 65s para el siguiente...")
+                        print(f"[OK] CV evaluado: {os.path.basename(pdf_path)}. Esperando 15s antes del siguiente...")
                         await asyncio.sleep(15)
                         break  # Éxito, salir del bucle de reintentos
                     except Exception as e:
-                        print(f"Error al procesar {pdf_path} (Intento {attempt+1}/{max_retries}): {str(e)}")
+                        print(f"[ERROR] Fallo al procesar {os.path.basename(pdf_path)} (Intento {attempt+1}/{max_retries}): {str(e)}")
                         if attempt < max_retries - 1:
-                            print("Esperando 25 segundos antes de reintentar por Rate Limit...")
+                            print(f"[RETRY] Reintentando en 15s...")
                             await asyncio.sleep(15)
                         else:
-                            print(f"Se omitió {pdf_path} tras múltiples errores.")
+                            print(f"[SKIP] Se omitió {os.path.basename(pdf_path)} tras {max_retries} intentos fallidos.")
 
             results.sort(key=lambda x: x["puntaje_total"], reverse=True)
             return JSONResponse({"top5": results, "total": len(results)})  
