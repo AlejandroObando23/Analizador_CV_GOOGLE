@@ -190,6 +190,4 @@ El agente evalúa cada CV en 4 categorías con un puntaje máximo de **100 punto
 
 ---
 
-## 📝 Licencia
 
-Este proyecto es de uso académico.
