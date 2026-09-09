@@ -36,8 +36,6 @@ Sistema de evaluación automatizada de currículums (CVs) impulsado por **Google
 │   ├── req.py        # Modelo Pydantic con el esquema de evaluación
 │   ├── pdf_text.py   # Extracción de texto de archivos PDF
 │   └── models.py     # Modelos adicionales de datos
-├── Docs/             # Documentos del proyecto
-│   └── FORMULARIO TECNICO ESPECIALIZADO_APC (1).docx
 ├── Frontend/         # Aplicación React + Vite
 │   ├── src/
 │   │   ├── App.tsx   # Componente principal de la interfaz
