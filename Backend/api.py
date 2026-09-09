@@ -92,8 +92,8 @@ async def _evaluar_pdf(pdf_path: str, puesto: str, formacion: str, experiencia: 
     session = await session_service.get_session(app_name=APP_NAME, user_id=USER_ID, session_id=session_id)
     resultado = session.state.get('informacion_candidato')
     if resultado is None:
-        raise Exception("El modelo falló al devolver información (probablemente Rate Limit de Groq)")
-    return resultado
+        raise Exception("El modelo falló al devolver información")
+    return resultado        
 
 @app.post("/api/evaluate-cv-batch")
 async def evaluate_archive(
@@ -131,7 +131,7 @@ async def evaluate_archive(
                 if cancel_flag["cancelled"]:
                     print("[INFO] Evaluación por lotes cancelada por el usuario.")
                     break
-                max_retries = 3
+                max_retries = 4
                 for attempt in range(max_retries):
                     try:
                         r = await _evaluar_pdf(pdf_path, puesto, formacion, experiencia, conocimientos, competencias)
@@ -140,14 +140,14 @@ async def evaluate_archive(
                         
                         r["filename"] = os.path.basename(pdf_path)
                         results.append(r)
-                        print(f"[OK] CV evaluado: {os.path.basename(pdf_path)}. Esperando 15s antes del siguiente...")
-                        await asyncio.sleep(15)
+                        print(f"[OK] CV evaluado: {os.path.basename(pdf_path)}. Esperando 10s antes del siguiente...")
+                        await asyncio.sleep(10)
                         break  # Éxito, salir del bucle de reintentos
                     except Exception as e:
                         print(f"[ERROR] Fallo al procesar {os.path.basename(pdf_path)} (Intento {attempt+1}/{max_retries}): {str(e)}")
                         if attempt < max_retries - 1:
-                            print(f"[RETRY] Reintentando en 15s...")
-                            await asyncio.sleep(15)
+                            print(f"[RETRY] Reintentando en 10s...")
+                            await asyncio.sleep(10)
                         else:
                             print(f"[SKIP] Se omitió {os.path.basename(pdf_path)} tras {max_retries} intentos fallidos.")
 

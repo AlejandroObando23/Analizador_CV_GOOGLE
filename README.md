@@ -30,12 +30,14 @@ Sistema de evaluación automatizada de currículums (CVs) impulsado por **Google
 ## 📁 Estructura del Proyecto
 
 ```
-├── agent.py          # Definición del agente evaluador con Google ADK
-├── api.py            # API REST con FastAPI (endpoints de evaluación)
-├── req.py            # Modelo Pydantic con el esquema de evaluación
-├── pdf_text.py       # Extracción de texto de archivos PDF
-├── .env              # Variables de entorno (API Keys) — NO subir a Git
-├── .gitignore        # Archivos ignorados por Git
+├── Backend/          # Servidor y API (FastAPI)
+│   ├── agent.py      # Definición del agente evaluador con Google ADK
+│   ├── api.py        # API REST con FastAPI (endpoints de evaluación)
+│   ├── req.py        # Modelo Pydantic con el esquema de evaluación
+│   ├── pdf_text.py   # Extracción de texto de archivos PDF
+│   └── models.py     # Modelos adicionales de datos
+├── Docs/             # Documentos del proyecto
+│   └── FORMULARIO TECNICO ESPECIALIZADO_APC (1).docx
 ├── Frontend/         # Aplicación React + Vite
 │   ├── src/
 │   │   ├── App.tsx   # Componente principal de la interfaz
@@ -44,6 +46,8 @@ Sistema de evaluación automatizada de currículums (CVs) impulsado por **Google
 │   │   └── main.tsx  # Punto de entrada de React
 │   ├── package.json
 │   └── vite.config.ts
+├── .env              # Variables de entorno (API Keys) — NO subir a Git
+├── .gitignore        # Archivos ignorados por Git
 └── README.md
 ```
 
@@ -79,6 +83,7 @@ GROQ_API_KEY="tu_api_key_de_groq"
 ### 3. Instalar dependencias del Backend
 
 ```bash
+cd Backend
 pip install fastapi uvicorn google-adk google-genai python-dotenv PyPDF2 rarfile pydantic
 ```
 
@@ -95,9 +100,10 @@ npm install
 
 ### Iniciar el Backend (API)
 
-Desde la raíz del proyecto:
+Desde el directorio `Backend`:
 
 ```bash
+cd Backend
 python api.py
 ```
 

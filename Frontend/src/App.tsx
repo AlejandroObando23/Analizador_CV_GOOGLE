@@ -1,16 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 export default function AgentInterface() {
   const [file, setFile] = useState<File | null>(null);
-  const [candidatos, setCandidatos] = useState<any[]>([]);
+  
+  // Inicializar el estado desde localStorage para persistir los datos si la página se recarga
+  const [candidatos, setCandidatos] = useState<any[]>(() => {
+    const saved = localStorage.getItem('candidatos');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [Total, setTotal] = useState<number>(0);
-  const [puesto, setPuesto] = useState("");
-  const [formacion, setFormacion] = useState("");
-  const [experiencia, setExperiencia] = useState("");
-  const [conocimientos, setConocimientos] = useState("");
-  const [competencias, setCompetencias] = useState("");
+  const [Total, setTotal] = useState<number>(() => {
+    const saved = localStorage.getItem('Total');
+    return saved ? parseInt(saved, 10) : 0;
+  });
+  const [puesto, setPuesto] = useState(() => localStorage.getItem('puesto') || "");
+  const [formacion, setFormacion] = useState(() => localStorage.getItem('formacion') || "");
+  const [experiencia, setExperiencia] = useState(() => localStorage.getItem('experiencia') || "");
+  const [conocimientos, setConocimientos] = useState(() => localStorage.getItem('conocimientos') || "");
+  const [competencias, setCompetencias] = useState(() => localStorage.getItem('competencias') || "");
+
+  // Guardar en localStorage cada vez que estos estados cambien
+  useEffect(() => {
+    localStorage.setItem('candidatos', JSON.stringify(candidatos));
+  }, [candidatos]);
+
+  useEffect(() => {
+    localStorage.setItem('Total', Total.toString());
+  }, [Total]);
+
+  useEffect(() => {
+    localStorage.setItem('puesto', puesto);
+    localStorage.setItem('formacion', formacion);
+    localStorage.setItem('experiencia', experiencia);
+    localStorage.setItem('conocimientos', conocimientos);
+    localStorage.setItem('competencias', competencias);
+  }, [puesto, formacion, experiencia, conocimientos, competencias]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -80,6 +105,21 @@ export default function AgentInterface() {
     }
   };
 
+  const handleRestablecer = () => {
+    setCandidatos([]);
+    setTotal(0);
+    setFile(null);
+    setPuesto("");
+    setFormacion("");
+    setExperiencia("");
+    setConocimientos("");
+    setCompetencias("");
+    const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
+
   return (
     <div className={`container ${candidatos.length > 0 ? 'expanded' : ''}`}>
       <h2 className="title-main">Evaluador de Candidatos IA</h2>
@@ -119,7 +159,7 @@ export default function AgentInterface() {
           <div className="upload-section">
             <label className="file-input-wrapper">
               Subir Cvs (Archivos .zip o .rar)
-              <input type="file" accept=".zip, .rar" onChange={handleFileChange} className='file-input' />
+              <input type="file" id="file-upload" accept=".zip, .rar" onChange={handleFileChange} className='file-input' />
             </label>
 
             <div className="button-group">
@@ -128,6 +168,9 @@ export default function AgentInterface() {
               </button>
               <button className='btn btn-danger' onClick={handleCancelar} disabled={!isLoading}>
                 Cancelar
+              </button>
+              <button className='btn btn-secondary' onClick={handleRestablecer} disabled={isLoading}>
+                Restablecer
               </button>
             </div>
 
