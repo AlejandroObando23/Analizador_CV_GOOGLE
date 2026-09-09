@@ -11,7 +11,7 @@ Sistema de evaluación automatizada de currículums (CVs) impulsado por **Google
 - **Ranking automático** de candidatos ordenados por puntaje total.
 - **Criterios personalizables** por el reclutador: formación académica, experiencia, conocimientos técnicos y competencias blandas.
 - **Cancelación de evaluaciones** en curso.
-- **Reintentos automáticos** ante fallos de la API (hasta 3 intentos por CV).
+- **Reintentos automáticos** ante fallos de la API (hasta 4 intentos por CV).
 
 ---
 
@@ -55,7 +55,7 @@ Sistema de evaluación automatizada de currículums (CVs) impulsado por **Google
 
 - **Python 3.12+**
 - **Node.js 18+**
-- **UnRAR** (solo si se van a procesar archivos `.rar`):
+- **UnRAR** (solo si se van a procesar archivos `.rar` o `.zip`):
   - Windows: Descargar `UnRAR.exe` desde [rarlab.com](https://www.rarlab.com/rar_add.htm) y agregarlo al PATH del sistema.
 
 ---
@@ -75,7 +75,6 @@ Crear un archivo `.env` en la raíz del proyecto con las siguientes claves:
 
 ```env
 GEMINI_API_KEY="tu_api_key_de_google"
-GROQ_API_KEY="tu_api_key_de_groq"
 ```
 
 ### 3. Instalar dependencias del Backend
